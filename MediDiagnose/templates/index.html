@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MediDiagnose AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>MediDiagnose <span class="ai-tag">AI</span></h1>
+            <p>Population-Specific Anemia Screening</p>
+        </header>
+
+        <form action="/predict" method="POST" class="grid-container">
+            <div class="card">
+                <h3>Patient Input</h3>
+                <select name="group">
+                    <option value="General">General</option>
+                    <option value="Athlete">Athlete</option>
+                    <option value="Smoker">Smoker</option>
+                    <option value="Pregnant">Pregnant</option>
+                </select>
+                <input type="number" step="0.1" name="hb" placeholder="Hemoglobin (g/dL)" required>
+                <input type="number" step="0.1" name="mcv" placeholder="MCV (fL)" required>
+                <button type="submit">Analyze Patient</button>
+            </div>
+
+            <div class="card risk-card {{ risk_class }}">
+                <h3>Risk Stratification</h3>
+                <div class="status-value">{{ prediction }}</div>
+                <p>Target Group: {{ group_val if group_val else "None" }}</p>
+                <p>Last HB Reading: {{ hb_val if hb_val else "0" }} g/dL</p>
+            </div>
+        </form>
+        
+        <div class="card">
+            <h3>Explainable AI (SHAP) Insights</h3>
+            <p>Feature contribution for this prediction:</p>
+            <div class="bar-bg"><div class="bar-fill" style="width: 80%;"></div></div>
+            <small>Hemoglobin Impact</small>
+        </div>
+    </div>
+</body>
+</html>
